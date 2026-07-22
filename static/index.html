@@ -380,10 +380,11 @@ tr{animation:fadeIn .3s ease}
 /* Contact Me Dropdown */
 .contact-wrap{position:relative}
 .contact-dropdown{
-  display:none;position:absolute;bottom:calc(100% + 8px);left:0;
+  display:none;position:absolute;bottom:calc(100% + 4px);left:0;
   background:var(--glass);backdrop-filter:blur(30px) saturate(180%);
-  border:1px solid var(--bg3);border-radius:14px;padding:8px;
-  min-width:220px;z-index:100;box-shadow:0 8px 40px rgba(0,0,0,.5),var(--glow);
+  border:1px solid rgba(var(--neon-rgb),.35);border-radius:18px;padding:8px;
+  min-width:220px;z-index:100;
+  box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 25px rgba(var(--neon-rgb),.25),0 0 60px rgba(var(--neon-rgb),.12);
   animation:scaleIn .2s ease;
 }
 .contact-dropdown.show{display:block}
@@ -392,11 +393,11 @@ tr{animation:fadeIn .3s ease}
   border-radius:10px;text-decoration:none;color:var(--txt);font-size:13px;
   font-weight:500;transition:all .2s;cursor:pointer;
 }
-.contact-link:hover{background:rgba(var(--neon-rgb),.1);transform:translateX(-3px)}
+.contact-link:hover{background:rgba(var(--neon-rgb),.12);transform:translateX(-3px);box-shadow:0 0 12px rgba(var(--neon-rgb),.15)}
 .contact-link svg{flex-shrink:0;transition:transform .2s}
 .contact-link:hover svg{transform:scale(1.15)}
 .contact-link span{font-size:12px;color:var(--txt2);direction:ltr;font-family:monospace}
-.contact-btn{display:flex;align-items:center;gap:6px}
+.contact-btn{display:flex;align-items:center;gap:6px;border-radius:20px!important;box-shadow:0 0 15px rgba(var(--neon-rgb),.3),0 0 30px rgba(var(--neon-rgb),.15);animation:neonPulse 2.5s ease-in-out infinite}
 .contact-btn span{font-size:12px}
 @media(max-width:500px){.contact-btn span{display:none}}
 @media(max-width:900px){
@@ -475,6 +476,7 @@ tr{animation:fadeIn .3s ease}
         داشبورد
       </div>
       <div class="nav-item" onclick="switchTab('users',this)">
+        <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
         کاربران
       </div>
       <div class="nav-item" onclick="switchTab('inbounds',this)">
@@ -510,7 +512,7 @@ tr{animation:fadeIn .3s ease}
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
-            <span>تماس با من</span>
+            <span>Contact Me</span>
           </button>
           <div class="contact-dropdown" id="contact-dropdown">
             <a class="contact-link" href="https://t.me/g1ithub" target="_blank" rel="noopener noreferrer">
@@ -532,6 +534,10 @@ tr{animation:fadeIn .3s ease}
               <span>amirappleidfd-stack</span>
             </a>
           </div>
+        </div>
+        <div class="lang-toggle" id="lang-toggle">
+          <button class="lang-btn active" data-lang="fa" onclick="setLang('fa')">فارسی</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en')">English</button>
         </div>
         <button class="btn btn-sm btn-g sidebar-tog" onclick="toggleSidebar()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
       </div>
@@ -768,8 +774,8 @@ tr{animation:fadeIn .3s ease}
   <form onsubmit="submitEditUser(event)">
     <input type="hidden" id="eu-id">
     <div class="f-g"><label>نام کاربری</label><input type="text" id="eu-name" required></div>
-    <div class="f-g"><label>حجم (GB - ۰=نامحدود)</label><input type="number" id="eu-vol" value="20"></div>
-    <div class="f-g"><label>روز اعتبار (۰=نامحدود)</label><input type="number" id="eu-exp" value="30"></div>
+    <div class="f-g"><label>حجم (GB - 0=نامحدود)</label><input type="number" id="eu-vol" value="20"></div>
+    <div class="f-g"><label>روز اعتبار (0=نامحدود)</label><input type="number" id="eu-exp" value="30"></div>
     <div class="f-g"><label>اتصال همزمان</label><input type="number" id="eu-conn" value="2"></div>
     <div class="f-g"><label>وضعیت</label><select id="eu-status"><option value="active">فعال</option><option value="inactive">غیرفعال</option></select></div>
     <div class="f-g" style="display:flex;align-items:center;gap:8px">
@@ -832,7 +838,7 @@ tr{animation:fadeIn .3s ease}
         <button type="button" class="btn btn-sm btn-b" onclick="generateRealityKeysUI()" style="width:100%;margin-bottom:10px">تولید کلید Reality (x25519)</button>
         <div class="f-g"><label>Destination</label><input type="text" id="ib-dest" value="is1-ssl.mzstatic.com:443" dir="ltr"></div>
         <div class="f-g"><label>Server Names (SNI)</label><input type="text" id="ib-servernames" value="is1-ssl.mzstatic.com" dir="ltr" placeholder="با کاما جدا کنید"></div>
-        <div class="f-g"><label>Short IDs</label><div style="display:flex;gap:6px"><input type="text" id="ib-shortids" value="" dir="ltr" placeholder="هگز ۸ رقمی — خالی = تصادفی" style="flex:1"><button type="button" class="btn btn-sm" onclick="generateShortId()" style="white-space:nowrap">+ تولید</button></div></div>
+        <div class="f-g"><label>Short IDs</label><div style="display:flex;gap:6px"><input type="text" id="ib-shortids" value="" dir="ltr" placeholder="هگز 8 رقمی — خالی = تصادفی" style="flex:1"><button type="button" class="btn btn-sm" onclick="generateShortId()" style="white-space:nowrap">+ تولید</button></div></div>
         <div class="f-g"><label>SpiderX</label><input type="text" id="ib-spiderx" dir="ltr" placeholder="/" value="/"></div>
         <div class="f-g"><label>External Domain</label><input type="text" id="ib-extdomain" dir="ltr" placeholder="دامنه خارجی برای کانفیگ کلاینت"></div>
         <div class="f-g"><label>External Port</label><input type="number" id="ib-extport" value="443" dir="ltr" placeholder="443"></div>
@@ -1089,6 +1095,92 @@ document.addEventListener('click', function(e) {
     $id('contact-dropdown').classList.remove('show');
   }
 });
+
+// ─── Language Switcher ───
+var currentLang = 'fa';
+var langStrings = {
+  fa: {
+    dashboard: 'داشبورد',
+    users: 'کاربران',
+    inbounds: 'اینباندها',
+    telegram: 'Telegram Bot',
+    settings: 'تنظیمات',
+    logout: 'خروج',
+    contactMe: 'Contact Me',
+    greeting: 'سلام'
+  },
+  en: {
+    dashboard: 'Dashboard',
+    users: 'Users',
+    inbounds: 'Inbounds',
+    telegram: 'Telegram Bot',
+    settings: 'Settings',
+    logout: 'Logout',
+    contactMe: 'Contact Me',
+    greeting: 'Hello'
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  // Update toggle buttons
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  // Update HTML direction
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+  // Update nav items
+  var navItems = document.querySelectorAll('.nav-item');
+  var keys = ['dashboard', 'users', 'inbounds', '', 'telegram', 'settings', 'logout'];
+  // Dashboard (index 0) - has SVG icon + text
+  // Users (1) - has SVG icon + text
+  // etc.
+  navItems.forEach(function(item, i) {
+    if (keys[i] && langStrings[lang][keys[i]]) {
+      // Find the text node (not the SVG)
+      var text = item.querySelector('.nav-ic');
+      if (text && text.nextSibling) {
+        text.nextSibling.textContent = '\n        ' + langStrings[lang][keys[i]] + '\n      ';
+      } else if (!text) {
+        // Items without icon (should not happen now)
+        var tc = item.childNodes;
+        for (var j = 0; j < tc.length; j++) {
+          if (tc[j].nodeType === 3 && tc[j].textContent.trim()) {
+            tc[j].textContent = '\n        ' + langStrings[lang][keys[i]] + '\n      ';
+            break;
+          }
+        }
+      }
+    }
+  });
+  // Update Contact Me button text
+  var contactSpan = document.querySelector('.contact-btn span');
+  if (contactSpan) contactSpan.textContent = langStrings[lang].contactMe;
+  // Force English digits
+  convertDigits();
+  // Update greeting
+  var grt = $id('grt');
+  if (grt) grt.innerHTML = grt.innerHTML.replace(/سلام|Hello/g, langStrings[lang].greeting);
+}
+
+function convertDigits() {
+  var persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(function(node) {
+    if (node.parentElement && node.parentElement.closest('script,style,input,textarea')) return;
+    var txt = node.textContent;
+    for (var i = 0; i < 10; i++) {
+      txt = txt.split(persianDigits[i]).join(String(i));
+    }
+    if (txt !== node.textContent) node.textContent = txt;
+  });
+}
+
+// Auto-convert digits on load
+setTimeout(convertDigits, 500);
 
 // ─── Load All ───
 async function loadAll() {
@@ -1890,17 +1982,17 @@ function closeModal(id) { $id(id).classList.remove('show'); }
 // ─── Helpers ───
 function esc(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtBytes(b) {
-  if (b === null || b === undefined || b === 0) return '۰ B';
+  if (b === null || b === undefined || b === 0) return '0 B';
   var u = ['B','KB','MB','GB','TB'], i = 0;
   var n = Number(b);
-  if (isNaN(n) || n < 0) return '۰ B';
+  if (isNaN(n) || n < 0) return '0 B';
   while (n >= 1024 && i < 4) { n /= 1024; i++; }
   return n.toFixed(i === 0 ? 0 : 1) + ' ' + u[i];
 }
 function fmtUptime(s) {
-  if (s === null || s === undefined || s === 0) return '۰s';
+  if (s === null || s === undefined || s === 0) return '0s';
   var n = Number(s);
-  if (isNaN(n) || n < 0) return '۰s';
+  if (isNaN(n) || n < 0) return '0s';
   var d = Math.floor(n / 86400), h = Math.floor((n % 86400) / 3600), m = Math.floor((n % 3600) / 60);
   return (d ? d + 'd ' : '') + h + 'h ' + m + 'm';
 }
@@ -2135,7 +2227,7 @@ async function loadSubscriptions() {
       }) : [];
       h += '<div class="sub-card">' +
         '<div class="sub-card-h"><span class="sub-card-name">' + esc(s.name) + ' ' + mixBadge + '</span>' +
-        '<span style="font-size:11px;color:var(--txt2)">ترافیک: ' + (s.total_used_fmt || '۰ B') + '</span></div>' +
+        '<span style="font-size:11px;color:var(--txt2)">ترافیک: ' + (s.total_used_fmt || '0 B') + '</span></div>' +
         '<input class="sub-link" value="' + esc(s.sub_url || '') + '" readonly onclick="this.select();toast(\'لینک کپی شد\',\'ok\')">';
       if (s.public_url) {
         h += '<input class="sub-link" value="' + esc(s.public_url || '') + '" readonly onclick="this.select();toast(\'لینک عمومی کپی شد\',\'ok\')" style="margin-bottom:4px">';
@@ -2189,7 +2281,7 @@ async function loadAllSubscriptions() {
           '</div>' +
         '</div>' +
         '<div style="font-size:10px;color:var(--txt2);margin-bottom:6px">📎 کلاینت‌ها: ' + esc(clientNamesText) + '</div>' +
-        '<div style="font-size:10px;color:var(--txt2);margin-bottom:6px">📦 ترافیک: ' + (s.total_used_fmt || '۰ B') + '</div>' +
+        '<div style="font-size:10px;color:var(--txt2);margin-bottom:6px">📦 ترافیک: ' + (s.total_used_fmt || '0 B') + '</div>' +
         '<input class="sub-link" value="' + esc(s.sub_url || '') + '" readonly onclick="this.select();toast(\'لینک کپی شد\',\'ok\')">';
       if (s.public_url) {
         h += '<input class="sub-link" value="' + esc(s.public_url || '') + '" readonly onclick="this.select();toast(\'لینک عمومی کپی شد\',\'ok\')" style="margin-bottom:4px">';
