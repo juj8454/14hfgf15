@@ -746,7 +746,7 @@ async def subscription_handler(identifier: str, request: Request):
         vless = generate_vless_link(identifier, host, remark=f"Spider-{link['label']}", protocol=proto)
         content = base64.b64encode(vless.encode()).decode()
         return Response(content=content, media_type="text/plain",
-                        headers={"profile-title": quote(link["label"]), "support-url": "https://t.me/Spider_vpn1"})
+                        headers={"profile-title": quote(link["label"]), "support-url": "https://t.me/SpiderPanel"})
 
     raise HTTPException(status_code=404, detail="not found")
 
