@@ -160,9 +160,10 @@ body{
   padding:14px 24px;background:var(--glass);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--bg3);display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:50;
+  overflow:visible;
 }
 .topbar-greet{font-size:14px}.topbar-greet strong{color:var(--neon)}
-.topbar-r{display:flex;gap:8px;align-items:center}
+.topbar-r{display:flex;gap:8px;align-items:center;overflow:visible}
 .content{padding:20px 24px;flex:1;overflow-y:auto;position:relative;z-index:1}
 
 /* Cards - Glass */
@@ -380,10 +381,10 @@ tr{animation:fadeIn .3s ease}
 /* Contact Me Dropdown */
 .contact-wrap{position:relative}
 .contact-dropdown{
-  display:none;position:absolute;bottom:calc(100% + 4px);left:0;
+  display:none;position:absolute;top:calc(100% + 4px);left:0;
   background:var(--glass);backdrop-filter:blur(30px) saturate(180%);
   border:1px solid rgba(var(--neon-rgb),.35);border-radius:18px;padding:8px;
-  min-width:220px;z-index:100;
+  min-width:220px;z-index:200;
   box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 25px rgba(var(--neon-rgb),.25),0 0 60px rgba(var(--neon-rgb),.12);
   animation:scaleIn .2s ease;
 }
@@ -399,6 +400,25 @@ tr{animation:fadeIn .3s ease}
 .contact-link span{font-size:12px;color:var(--txt2);direction:ltr;font-family:monospace}
 .contact-btn{display:flex;align-items:center;gap:6px;border-radius:20px!important;box-shadow:0 0 15px rgba(var(--neon-rgb),.3),0 0 30px rgba(var(--neon-rgb),.15);animation:neonPulse 2.5s ease-in-out infinite}
 .contact-btn span{font-size:12px}
+
+/* Language Neon Toggle */
+.lang-neon{
+  display:inline-flex!important;align-items:center;gap:5px;
+  border:1px solid rgba(var(--neon-rgb),.4)!important;
+  border-radius:20px!important;
+  background:var(--bg3);color:var(--neon);
+  box-shadow:0 0 12px rgba(var(--neon-rgb),.25),0 0 25px rgba(var(--neon-rgb),.12);
+  animation:neonPulse 2.5s ease-in-out infinite;
+  font-size:11px;font-weight:800;letter-spacing:1px;
+  padding:6px 14px!important;
+  transition:all .25s;cursor:pointer;
+}
+.lang-neon:hover{
+  background:rgba(var(--neon-rgb),.15);
+  box-shadow:0 0 18px rgba(var(--neon-rgb),.4),0 0 40px rgba(var(--neon-rgb),.2);
+  transform:scale(1.05);
+}
+.lang-neon:active{transform:scale(.95)}
 @media(max-width:500px){.contact-btn span{display:none}}
 @media(max-width:900px){
   .contact-dropdown{left:auto;right:0}
@@ -471,28 +491,28 @@ tr{animation:fadeIn .3s ease}
       </div>
     </div>
     <nav class="sb-nav">
-      <div class="nav-item active" onclick="switchTab('dashboard',this)">
+      <div class="nav-item active" onclick="switchTab('dashboard',this)" id="nav-dashboard">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></span>
         داشبورد
       </div>
-      <div class="nav-item" onclick="switchTab('users',this)">
+      <div class="nav-item" onclick="switchTab('users',this)" id="nav-users">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
         کاربران
       </div>
-      <div class="nav-item" onclick="switchTab('inbounds',this)">
+      <div class="nav-item" onclick="switchTab('inbounds',this)" id="nav-inbounds">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
         اینباندها
       </div>
       <!-- Subscriptions removed per user request -->
-      <div class="nav-item" onclick="switchTab('telegram',this)">
+      <div class="nav-item" onclick="switchTab('telegram',this)" id="nav-telegram">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 9v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 9z"/><path d="m3.15 9.88 7.51 4.64a1 1 0 0 0 1.13-.31l5.28-5.28"/><path d="m12.72 11.08 5.84 3.56"/><path d="m9 9.5 5.5 5.5"/></svg></span>
         Telegram Bot
       </div>
-      <div class="nav-item" onclick="switchTab('settings',this)">
+      <div class="nav-item" onclick="switchTab('settings',this)" id="nav-settings">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
         تنظیمات
       </div>
-      <div class="nav-item" onclick="doLogout()" style="color:var(--red)!important">
+      <div class="nav-item" onclick="doLogout()" style="color:var(--red)!important" id="nav-logout">
         <span class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m7 14l5-5-5-5m5 5H9"/></svg></span>
         خروج
       </div>
@@ -535,10 +555,10 @@ tr{animation:fadeIn .3s ease}
             </a>
           </div>
         </div>
-        <div class="lang-toggle" id="lang-toggle">
-          <button class="lang-btn active" data-lang="fa" onclick="setLang('fa')">فارسی</button>
-          <button class="lang-btn" data-lang="en" onclick="setLang('en')">English</button>
-        </div>
+        <button class="btn btn-sm lang-neon" id="lang-neon" onclick="toggleLang()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="lang-label">EN</span>
+        </button>
         <button class="btn btn-sm btn-g sidebar-tog" onclick="toggleSidebar()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
       </div>
     </div>
@@ -1121,47 +1141,40 @@ var langStrings = {
   }
 };
 
+function toggleLang() {
+  setLang(currentLang === 'fa' ? 'en' : 'fa');
+}
+
 function setLang(lang) {
   currentLang = lang;
-  // Update toggle buttons
-  document.querySelectorAll('.lang-btn').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+  // Update neon button label
+  var label = $id('lang-label');
+  if (label) label.textContent = lang === 'fa' ? 'EN' : 'FA';
   // Update HTML direction
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
-  // Update nav items
-  var navItems = document.querySelectorAll('.nav-item');
-  var keys = ['dashboard', 'users', 'inbounds', '', 'telegram', 'settings', 'logout'];
-  // Dashboard (index 0) - has SVG icon + text
-  // Users (1) - has SVG icon + text
-  // etc.
-  navItems.forEach(function(item, i) {
-    if (keys[i] && langStrings[lang][keys[i]]) {
-      // Find the text node (not the SVG)
-      var text = item.querySelector('.nav-ic');
-      if (text && text.nextSibling) {
-        text.nextSibling.textContent = '\n        ' + langStrings[lang][keys[i]] + '\n      ';
-      } else if (!text) {
-        // Items without icon (should not happen now)
-        var tc = item.childNodes;
-        for (var j = 0; j < tc.length; j++) {
-          if (tc[j].nodeType === 3 && tc[j].textContent.trim()) {
-            tc[j].textContent = '\n        ' + langStrings[lang][keys[i]] + '\n      ';
-            break;
-          }
-        }
-      }
-    }
-  });
+  // Update nav items by data-nav attribute
+  var map = {
+    'nav-dashboard': langStrings[lang].dashboard,
+    'nav-users': langStrings[lang].users,
+    'nav-inbounds': langStrings[lang].inbounds,
+    'nav-telegram': langStrings[lang].telegram,
+    'nav-settings': langStrings[lang].settings,
+    'nav-logout': langStrings[lang].logout
+  };
+  for (var id in map) {
+    var el = $id(id);
+    if (el) el.textContent = map[id];
+  }
   // Update Contact Me button text
   var contactSpan = document.querySelector('.contact-btn span');
   if (contactSpan) contactSpan.textContent = langStrings[lang].contactMe;
-  // Force English digits
-  convertDigits();
   // Update greeting
   var grt = $id('grt');
   if (grt) grt.innerHTML = grt.innerHTML.replace(/سلام|Hello/g, langStrings[lang].greeting);
+  // Force English digits
+  convertDigits();
+}
 }
 
 function convertDigits() {
