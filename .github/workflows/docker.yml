@@ -1,34 +1,37 @@
-name: Build and Push Docker Image
+FROM python:3.11-slim AS builder
 
-on:
-  push:
-    branches:
-      - main
+WORKDIR /build
 
-permissions:
-  contents: read
-  packages: write
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ libffi-dev libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-jobs:
-  docker:
-    runs-on: ubuntu-latest
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+FROM python:3.11-slim
 
-      - name: Build image
-        run: |
-          docker build \
-          -t ghcr.io/${{ github.repository_owner }}/spider-panel:latest .
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl libssl3 libffi8 \
+    && rm -rf /var/lib/apt/lists/*
 
-      - name: Push image
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/spider-panel:latest
+WORKDIR /app
+
+COPY --from=builder /install /usr/local
+
+COPY main.py .
+COPY pages.py .
+COPY relay_vless.py .
+COPY shared.py .
+COPY xhttp_siz10.py .
+COPY static/ static/
+
+RUN mkdir -p /data /app/static/uploads
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=60s --timeout=10s --start-period=15s --retries=3 \
+ CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:'+__import__('os').environ.get('PORT','8080')+'/health')"
+
+CMD ["python", "main.py"]
