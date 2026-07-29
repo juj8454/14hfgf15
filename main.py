@@ -456,6 +456,14 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "نامشخص"
 
 
+async def parse_json_body(request: Request) -> dict:
+    """Parse JSON safely and return a controlled 400 for malformed payloads."""
+    try:
+        return await request.json()
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+        raise HTTPException(status_code=400, detail="invalid json") from exc
+
+
 # ── User helper functions ────────────────────────────────────────────────────
 def is_user_allowed(user: dict | None) -> bool:
     """Check if a user is active and not expired."""
@@ -901,7 +909,7 @@ async def sub_group_subscription(uuid_key: str, request: Request):
 # ── Auth endpoints ────────────────────────────────────────────────────────────
 @app.post("/api/login")
 async def api_login(request: Request):
-    body = await request.json()
+    body = await parse_json_body(request)
     ip = client_ip(request)
     if hash_password(str(body.get("password", ""))) != AUTH["password_hash"]:
         log_activity("auth", f"تلاش ورود ناموفق از {ip}", "err")
@@ -925,7 +933,7 @@ async def api_me(request: Request):
 
 @app.post("/api/change-password")
 async def api_change_password(request: Request, token=Depends(require_auth)):
-    body = await request.json()
+    body = await parse_json_body(request)
     if hash_password(str(body.get("current_password", ""))) != AUTH["password_hash"]:
         raise HTTPException(status_code=400, detail="رمز فعلی اشتباه است")
     new = str(body.get("new_password", ""))
