@@ -3064,20 +3064,26 @@ def _add_inbound_to_xray(cfg: dict, ib: dict, iid: str, host: str):
                 "scStreamUpServerSecs": xh_settings.get("scStreamUpServerSecs", "20-80"),
             }
     elif security == "tls":
+        tls_settings = {
+            "certificates": [{
+                "certificateFile": "/etc/xray/cert.pem",
+                "keyFile": "/etc/xray/key.pem"
+            }]
+        }
+        server_name = sni_val or domain or host
+        if server_name:
+            tls_settings["serverName"] = server_name
+
         inbound_obj["streamSettings"] = {
             "network": network,
             "security": "tls",
-            "tlsSettings": {
-                "certificates": [{
-                    "certificateFile": "/etc/xray/cert.pem",
-                    "keyFile": "/etc/xray/key.pem"
-                }]
-            }
+            "tlsSettings": tls_settings,
         }
         if network == "ws":
+            ws_host = ws_settings.get("host") or domain or host
             inbound_obj["streamSettings"]["wsSettings"] = {
                 "path": ws_settings.get("path", "/"),
-                "headers": {"Host": ws_settings.get("host", domain)}
+                "headers": {"Host": ws_host}
             }
         elif network == "grpc":
             inbound_obj["streamSettings"]["grpcSettings"] = {
